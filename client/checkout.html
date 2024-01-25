@@ -6,10 +6,49 @@
     <title>PayPal JS SDK Standard Integration</title>
   </head>
   <body>
-    <div id="paypal-button-container"></div>
     <p id="result-message"></p>
+    <div id="paypal-buttons-container"></div>
     <!-- Replace the "test" client-id value with your client-id -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AfqfQBYyJ9qr02NJsn4FS4QGYf2YUEQiRTO93X-L3eA5dP8vy-x87z5XWxQkJFjX6fNENAJNbkhnCr5l&currency=USD"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AfqfQBYyJ9qr02NJsn4FS4QGYf2YUEQiRTO93X-L3eA5dP8vy-x87z5XWxQkJFjX6fNENAJNbkhnCr5l&components=buttons,marks&currency=USD"></script>
+    <label>
+      <input type="radio" name="payment-option" value="paypal" checked><p>Pay with PayPal</p>
+    </label>
+    <label>
+      <input type="radio" name="payment-option" value="alternate"><p>Pay differently</p>
+    </label>
+    <div id="paypal-marks-container"></div>
+    <div id="alternate-button-container">
+      <button>Pay with a different method</button>
+    </div>
+    <script>
+      // Render the PayPal marks
+      paypal.Marks().render('#paypal-marks-container');
+      // Render the PayPal buttons
+      paypal.Buttons().render('#paypal-buttons-container');
+      // Listen for changes to the radio buttons
+      document.querySelectorAll('input[name=payment-option]')
+        .forEach(function (el) {
+          el.addEventListener('change', function (event) {
+            // If PayPal is selected, show the PayPal button
+            if (event.target.value === 'paypal') {
+              document.body.querySelector('#alternate-button-container')
+                .style.display = 'none';
+              document.body.querySelector('#paypal-button-container')
+                .style.display = 'block';
+            }
+            // If alternate funding is selected, show a different button
+            if (event.target.value === 'alternate') {
+              document.body.querySelector('#alternate-button-container')
+                .style.display = 'block';
+              document.body.querySelector('#paypal-button-container')
+                .style.display = 'none';
+            }
+          });
+        });
+      // Hide non-PayPal button by default
+      document.body.querySelector('#alternate-button-container')
+        .style.display = 'none';
+    </script>
     <script>
       paypal.Buttons({
         createOrder() {
