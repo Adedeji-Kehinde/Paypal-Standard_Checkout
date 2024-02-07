@@ -6,25 +6,35 @@
     <title>PayPal JS SDK Standard Integration</title>
   </head>
   <body>
+    <br><br><br>
+    <label>
+      <input type="radio" name="payment-option" value="paypal" checked>Pay with PayPal
+    </label>
     <p id="result-message"></p>
     <div id="paypal-buttons-container"></div>
     <!-- Replace the "test" client-id value with your client-id -->
     <script src="https://www.paypal.com/sdk/js?client-id=AfqfQBYyJ9qr02NJsn4FS4QGYf2YUEQiRTO93X-L3eA5dP8vy-x87z5XWxQkJFjX6fNENAJNbkhnCr5l&components=buttons,marks&currency=USD"></script>
+    <br>
     <label>
-      <input type="radio" name="payment-option" value="paypal" checked><p>Pay with PayPal</p>
-    </label>
-    <label>
-      <input type="radio" name="payment-option" value="alternate"><p>Pay differently</p>
+      <input type="radio" name="payment-option" value="alternate">Pay differently
     </label>
     <div id="paypal-marks-container"></div>
     <div id="alternate-button-container">
       <button>Pay with a different method</button>
     </div>
+    <br>
+    <label>
+      <input type="radio" name="payment-option" value="subscription">PayPal Subscription
+    </label>
+    <div id="paypal-button-container-P-5K639031RL016781CMXBVJAQ"></div>
+    
     <script>
       // Render the PayPal marks
       paypal.Marks().render('#paypal-marks-container');
       // Render the PayPal buttons
       paypal.Buttons().render('#paypal-buttons-container');
+      // Render the PayPal buttons
+      paypal.Buttons().render('#paypal-button-container-P-5K639031RL016781CMXBVJAQ');
       // Listen for changes to the radio buttons
       document.querySelectorAll('input[name=payment-option]')
         .forEach(function (el) {
@@ -33,22 +43,38 @@
             if (event.target.value === 'paypal') {
               document.body.querySelector('#alternate-button-container')
                 .style.display = 'none';
-              document.body.querySelector('#paypal-button-container')
+              document.body.querySelector('#paypal-button-container-P-5K639031RL016781CMXBVJAQ')
+                .style.display = 'none';
+              document.body.querySelector('#paypal-buttons-container')
                 .style.display = 'block';
             }
             // If alternate funding is selected, show a different button
             if (event.target.value === 'alternate') {
               document.body.querySelector('#alternate-button-container')
                 .style.display = 'block';
-              document.body.querySelector('#paypal-button-container')
+              document.body.querySelector('#paypal-buttons-container')
                 .style.display = 'none';
+              document.body.querySelector('#paypal-button-container-P-5K639031RL016781CMXBVJAQ')
+                .style.display = 'none';
+            }
+            // If subscription funding is selected, show a different button
+            if (event.target.value === 'subscription') {
+              document.body.querySelector('#alternate-button-container')
+                .style.display = 'none';
+              document.body.querySelector('#paypal-buttons-container')
+                .style.display = 'none';
+              document.body.querySelector('#paypal-button-container-P-5K639031RL016781CMXBVJAQ')
+                .style.display = 'block';
             }
           });
         });
       // Hide non-PayPal button by default
       document.body.querySelector('#alternate-button-container')
         .style.display = 'none';
+      document.body.querySelector('#paypal-button-container-P-5K639031RL016781CMXBVJAQ')
+        .style.display = 'none';
     </script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AfqfQBYyJ9qr02NJsn4FS4QGYf2YUEQiRTO93X-L3eA5dP8vy-x87z5XWxQkJFjX6fNENAJNbkhnCr5l&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
     <script>
       paypal.Buttons({
         createOrder() {
@@ -72,7 +98,26 @@
         onShippingOptionsChange(data) {
           console.log("SELECTED_OPTION", data.selectedShippingOption);
         }
-      }).render('#paypal-button-container');
+      }).render('#paypal-buttons-container');
+    </script>
+    <script>
+      paypal.Buttons({
+          style: {
+              shape: 'pill',
+              color: 'gold',
+              layout: 'vertical',
+              label: 'subscribe'
+          },
+          createSubscription: function(data, actions) {
+            return actions.subscription.create({
+              /* Creates the subscription */
+              plan_id: 'P-5K639031RL016781CMXBVJAQ'
+            });
+          },
+          onApprove: function(data, actions) {
+            alert(data.subscriptionID); // You can add optional success message for the subscriber here
+          }
+      }).render('#paypal-button-container-P-5K639031RL016781CMXBVJAQ'); // Renders the PayPal button
     </script>
   </body>
 </html>

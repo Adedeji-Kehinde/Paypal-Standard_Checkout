@@ -43,8 +43,21 @@ window.paypal
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({
+            orderID: data.orderID
+          }),
+        })
+        .then(response => response.json())
+        .then((authorizePayload) => {
+          // Get the authorization id from your payload
+          const authorizationID = authorizePayload.authorizationID;
+          // Optional message given to purchaser
+          alert(`
+            You have authorized this transaction.
+            Order ID: ${data.orderID}
+            Authorization ID: ${authorizationID}
+          `);
         });
-        
         const orderData = await response.json();
         // Three cases to handle:
         //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
