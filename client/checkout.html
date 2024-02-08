@@ -13,8 +13,8 @@
     <p id="result-message"></p>
     <div id="paypal-buttons-container"></div>
     <!-- Replace the "test" client-id value with your client-id -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AfqfQBYyJ9qr02NJsn4FS4QGYf2YUEQiRTO93X-L3eA5dP8vy-x87z5XWxQkJFjX6fNENAJNbkhnCr5l&components=buttons,marks&currency=USD&enable-funding=card&disable-funding=sepa,giropay,sofort"></script>
-    <br>
+    <script src="https://www.paypal.com/sdk/js?client-id=AfqfQBYyJ9qr02NJsn4FS4QGYf2YUEQiRTO93X-L3eA5dP8vy-x87z5XWxQkJFjX6fNENAJNbkhnCr5l&components=buttons,marks&currency=USD&enable-funding=card&disable-funding=sepa,giropay,sofort&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+    <!-- <script src="https://www.paypal.com/sdk/js?client-id=AfqfQBYyJ9qr02NJsn4FS4QGYf2YUEQiRTO93X-L3eA5dP8vy-x87z5XWxQkJFjX6fNENAJNbkhnCr5l&components=buttons,marks&currency=USD&enable-funding=card&disable-funding=sepa,giropay,sofort"></script> -->
     <label>
       <input type="radio" name="payment-option" value="alternate">Pay differently
     </label>
@@ -31,11 +31,6 @@
     <script>
       // Render the PayPal marks
       paypal.Marks().render('#paypal-marks-container');
-      // Render the PayPal buttons
-      paypal.Buttons().render('#paypal-buttons-container');
-      // Render the PayPal buttons
-      paypal.Buttons().render('#paypal-button-container-P-5K639031RL016781CMXBVJAQ');
-      // Listen for changes to the radio buttons
       document.querySelectorAll('input[name=payment-option]')
         .forEach(function (el) {
           el.addEventListener('change', function (event) {
@@ -73,9 +68,7 @@
         .style.display = 'none';
       document.body.querySelector('#paypal-button-container-P-5K639031RL016781CMXBVJAQ')
         .style.display = 'none';
-    </script>
-    <script src="https://www.paypal.com/sdk/js?client-id=AfqfQBYyJ9qr02NJsn4FS4QGYf2YUEQiRTO93X-L3eA5dP8vy-x87z5XWxQkJFjX6fNENAJNbkhnCr5l&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
-    <script>
+
       paypal.Buttons({
         createOrder() {
           return fetch("/api/orders", {
@@ -99,8 +92,6 @@
           console.log("SELECTED_OPTION", data.selectedShippingOption);
         }
       }).render('#paypal-buttons-container');
-    </script>
-    <script>
       paypal.Buttons({
           style: {
               shape: 'pill',
